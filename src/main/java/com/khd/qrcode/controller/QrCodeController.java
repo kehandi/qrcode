@@ -1,7 +1,10 @@
 package com.khd.qrcode.controller;
 
+import com.khd.qrcode.entity.QrCodeEntity;
+import com.khd.qrcode.util.IdUtils;
 import com.khd.qrcode.util.QRcodeUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
@@ -9,6 +12,8 @@ import javax.imageio.stream.ImageOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 //@RequestMapping("QrCode")
@@ -32,7 +37,7 @@ public class QrCodeController {
 
         // 存放在二维码中的内容
 //        String text = EncryptUtil.encrypt(shop_id) + "_hfyy";
-        String text = "kehandi is good";
+        String text = "kehandi is handsome";
 
         //获取二维码logo路径
 //        String logoPath = "F:/head/test.jpg";
@@ -84,4 +89,19 @@ public class QrCodeController {
         }
         return is;
     }
+
+    @GetMapping("/test1")
+    public String test1(@RequestParam Integer num, HttpServletResponse response) {
+        if (num == null || num <= 0) {
+            throw new IllegalArgumentException("num 有误");
+        }
+        List<QrCodeEntity> sampleCodeList = new ArrayList<>();
+
+        for (int i = 0; i < num; i++) {
+            sampleCodeList.add(new QrCodeEntity(IdUtils.randomUUID().replace("-", "").toLowerCase()));
+        }
+        QRcodeUtils.getCodeZip(response, "2021070600560001", sampleCodeList);
+        return "success";
+    }
+
 }
