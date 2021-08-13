@@ -1,9 +1,12 @@
 package com.khd.qrcode.controller;
 
+import com.khd.qrcode.entity.ExchangeCodeEntity;
 import com.khd.qrcode.entity.QrCodeEntity;
 import com.khd.qrcode.util.IdUtils;
 import com.khd.qrcode.util.QRcodeUtils;
+import com.khd.qrcode.util.QrCodeUtil;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -101,6 +104,17 @@ public class QrCodeController {
             sampleCodeList.add(new QrCodeEntity(IdUtils.randomUUID().replace("-", "").toLowerCase()));
         }
         QRcodeUtils.getCodeZip(response, "2021070600560001", sampleCodeList);
+        return "success";
+    }
+
+    @PostMapping("/batch/export/test")
+    public String exportTest(HttpServletResponse response) {
+        List<ExchangeCodeEntity> exchangeCodeList = new ArrayList<>();
+        ExchangeCodeEntity exchangeCodeEntity = new ExchangeCodeEntity();
+        exchangeCodeEntity.setIdentifyCode("319dd24139594e2e9dad");
+        exchangeCodeList.add(exchangeCodeEntity);
+        // 一切就绪，用输出流导出二维码图片Zip
+        QrCodeUtil.getExchangeCodeZip(response, "2021070800010001", exchangeCodeList);
         return "success";
     }
 
